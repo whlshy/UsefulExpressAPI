@@ -1,0 +1,10 @@
+{
+    "user": "sa",
+    "password": "!a5566423",
+    "server": "10.21.25.71", 
+    "database": "EDU_Technology",
+    "options": {
+        "encrypt": true,
+        "enableArithAbort": true
+    }
+}

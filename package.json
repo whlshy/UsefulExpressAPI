@@ -1,0 +1,25 @@
+{
+  "name": "usefulexpressapi",
+  "version": "1.0.0",
+  "description": "usefulexpressapi",
+  "main": "index.js",
+  "scripts": {
+    "test": "node .\\index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/whlshy/UsefulExpressAPI.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/whlshy/UsefulExpressAPI/issues"
+  },
+  "homepage": "https://github.com/whlshy/UsefulExpressAPI#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mssql": "^6.3.1",
+    "swagger-jsdoc": "^6.0.6",
+    "swagger-ui-express": "^4.1.6"
+  }
+}
