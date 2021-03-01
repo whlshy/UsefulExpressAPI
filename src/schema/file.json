@@ -1,0 +1,9 @@
+[
+    { "attr": "FileName", "type": "NVarChar" },
+    { "attr": "FileExtension", "type": "NVarChar" },
+    { "attr": "ContentLen", "type": "Int" },
+    { "attr": "ContentType", "type": "NVarChar" },
+    { "attr": "NewOID", "type": "Int" },
+    { "attr": "NewUUID", "type": "NVarChar" },
+    { "attr": "mid", "type": "Int" }
+]

@@ -1,15 +1,6 @@
 const express = require('express')
 const app = express()
 const port = 3000
-const readonlyconfig = require('./dbconfig.json');
-let sql = require("mssql");
-
-// mssql 連線
-const pool = new sql.ConnectionPool(readonlyconfig);
-const readonlyPoolPromise = pool.connect();
-pool.on('error', err => {
-    console.log('Database Connection Failed :', err); // ... error handler
-})
 
 var getRouter = require('./src/routers/get');
 var postRouter = require('./src/routers/post');
@@ -24,9 +15,10 @@ app.use('/api', getRouter)
 app.use('/api', postRouter)
 app.use('/api', accountRouter)
 
-var swaggerRouter = require('./src/swagger/swagger.js');
-app.use('/swagger', swaggerRouter);
-
+// var swagger = require('./swagger');
+const swaggerUi = require('swagger-ui-express');
+const swaggerFile = require('./src/swagger/swagger-output.json') // 剛剛輸出的 JSON
+app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

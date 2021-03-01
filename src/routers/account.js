@@ -1,30 +1,32 @@
 var express = require('express');
 var router = express.Router();
+var runSQL = require('../lib/runSQL')
+var schema = require('../schema/account.json')
 
-/**
- * @swagger
- * /api/me:
- *   get:
- *     summary: 取得目前登入帳號詳細資訊
- *     description: Create Grid
- *     tags:
- *       - Acount
- *     produces:
- *       - application/json
- *     responses:
- *       200:
- *         description: Success
- */
 
-router.get('/me', function (req, res, next) {
-    res.json({
-        "CName": "admin",
-        "Role": "R"
-    });
+router.get('/me', async (req, res, next) => {
+    // #swagger.tags = ['account']
+    sqlcode = "select * from vd_Member where OID = @mid"
+    let response = await runSQL(sqlcode, req, schema)
+    res.json(response);
 });
 
-router.get('/hi', function (req, res, next) {
-    res.json({ status: 1, message: "hi" });
+router.post('/logout', function (req, res, next) {
+    // #swagger.tags = ['account']
+    if (req.body) {
+        console.log('hi')
+        var name = req.body.name;
+    }
+    let name1 = req.query.name1;
+    console.log(req.query)
+    res.json({ status: 1, message: "logount susccess" });
+});
+
+
+router.get('/name', function (req, res, next) {
+    // #swagger.tags = ['account']
+    console.log(req.query)
+    res.json({ status: 1, message: name });
 });
 
 module.exports = router;
