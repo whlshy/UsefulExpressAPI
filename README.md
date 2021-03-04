@@ -9,7 +9,10 @@
   - [Swagger Setting](#Swagger)
   - [執行](#執行)
   - [Add New Router](#Router)
-  - [Run SQL and Schema](#SQL&Schema)
+  - [Run SQL and Schema](#SQL_and_Schema)
+    - [runSQL](#runSQL)
+    - [Schema](#Schema)
+    - [Use Schema](#UseSchema)
 
 
 ## Installation
@@ -111,10 +114,20 @@ app.use('/api', travelRouter)                        // 新增 router 路徑
 
 ![image](https://user-images.githubusercontent.com/49122960/109974869-f826dd00-7d34-11eb-8292-8213d10eff9c.png)
 
-### SQL&Schema
+### SQL_and_Schema
+
+#### runSQL
 如果想要執行 SQL 語法
 
-**require('../lib/runSQL')**
+引入 Lib 中的 runSQL.js：
+```js
+const runSQL = require('../lib/runSQL')
+```
+參數：
+```js
+runSQL(sqlcode, req, schema)  // SQL語法, 所有request, SQL參數型別定義
+```
+第一個範例先暫時不用到SQL參數，只先傳一個SQL語法到runSQL之中
 
 **File: travel.js**
 ```js
@@ -133,3 +146,58 @@ module.exports = router;
 ```
 ![image](https://user-images.githubusercontent.com/49122960/109981207-a9307600-7d3b-11eb-92f4-d450a5f609a0.png)
 
+#### Schema
+定義在 SQL 中變數的型別
+
+在 './src/schema' 當中新增檔案 travel.json
+
+**Example File: travel.json**
+```json
+[
+    { "attr": "cid", "type": "Int" },
+    { "attr": "oid", "type": "Int" }
+]
+```
+| attr | type |
+|-----|-----|
+| 變數名稱 | SQL型別 |
+
+在 **Swagger UI** 中，如果 tags 與 schema 名子一致則會自動帶入 schema 的型別
+
+在 **runSQL** 中傳入 schema 則會比對 sqlcode 中的 input 與 schema 中的 attr，並帶入 SQL 型別
+
+#### UseSchema
+有傳入變數的版本
+
+在 js 中引入 schema
+```js
+const schema = require('../schema/travel.json')  // travel.js 用到的 sql 變數都會在這個 travel.json 當中定義
+```
+
+**Example: getCCData GET**
+```js
+const schema = require('../schema/travel.json')  // 作為 runSQL 中第三個參數
+
+router.get('/travel/getCCData', async (req, res, next) => {  // method GET
+    // #swagger.tags = ['travel']
+    let { cid } = req.query  // 為 swagger ui 宣告有一個 query 叫 cid
+    let sqlcode = "select PCID 'pcid', P.CName 'cname', CCID 'ccid', C.CName 'pname', P.NamePath 'namepath' from Class P, Inheritance I, Class C where P.CID = I.PCID and I.CCID = C.CID and P.CID = @cid" // 要執行的 SQL 語法
+    let response = await runSQL(sqlcode, req, schema)
+    res.json(response)
+});
+```
+![image](https://user-images.githubusercontent.com/49122960/109989492-82763d80-7d43-11eb-84ad-6b7ec3ace3ff.png)
+
+**Example: getCOData POST**
+```js
+router.post('/travel/getCOData', async (req, res, next) => {  // method GET
+    // #swagger.tags = ['travel']
+    let { cid } = req.body  // 為 swagger ui 宣告有一個 body 叫 cid
+    let sqlcode = "select C.NamePath 'namepath', O.OID 'oid', O.Title 'title', O.Class 'district' from Class C, CO, Object O where C.CID = CO.CID and CO.OID = O.OID and C.CID = @cid" // 要執行的 SQL 語法
+    let response = await runSQL(sqlcode, req, schema)
+    res.json(response)
+});
+```
+![image](https://user-images.githubusercontent.com/49122960/109995249-172f6a00-7d49-11eb-8a25-11a1fbb365a9.png)
+
+![image](https://user-images.githubusercontent.com/49122960/109995433-3e863700-7d49-11eb-800a-b2632a46b6da.png)

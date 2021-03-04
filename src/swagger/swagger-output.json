@@ -81,6 +81,45 @@
         "parameters": [],
         "responses": {}
       }
+    },
+    "/api/travel/getCCData": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "query",
+            "type": "integer"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/travel/getCOData": {
+      "post": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cid": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
     }
   },
   "definitions": {}

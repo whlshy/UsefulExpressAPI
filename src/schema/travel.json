@@ -1,0 +1,4 @@
+[
+    { "attr": "cid", "type": "Int" },
+    { "attr": "oid", "type": "Int" }
+]
