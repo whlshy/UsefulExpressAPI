@@ -1,23 +1,36 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-var getRouter = require('./src/routers/get');
-var postRouter = require('./src/routers/post');
-var accountRouter = require('./src/routers/account');
-
+// session setting
+var session = require('express-session');
+app.use(session({
+    secret: 'secret', // 對session id 相關的cookie 進行簽名
+    resave: true,
+    saveUninitialized: false, // 是否儲存未初始化的會話
+    cookie: {
+        httpOnly: false,
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24, // 設定 session 的有效時間，單位毫秒 (1000 * 60 = 1分鐘)
+        sameSite: "none"
+    },
+}));
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-app.use('/api', getRouter)
-app.use('/api', postRouter)
-app.use('/api', accountRouter)
+var accountRouter = require('./src/routers/account');
+var fileRouter = require('./src/routers/file');
 
-// var swagger = require('./swagger');
+app.use('/api', accountRouter)
+app.use('/api', fileRouter)
+
 const swaggerUi = require('swagger-ui-express');
-const swaggerFile = require('./src/swagger/swagger-output.json') // 剛剛輸出的 JSON
+const swaggerFile = require('./src/swagger/swagger-output.json') // swagger autogen 輸出的 JSON
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // catch 404 and forward to error handler

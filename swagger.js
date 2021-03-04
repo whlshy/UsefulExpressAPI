@@ -1,11 +1,13 @@
 // swaggerAutogen
 const swaggerAutogen = require('swagger-autogen')()
 const fs = require('fs');
+var path = require('path');
+
 const routersFolder = './src/routers';
 let alltags = []
 fs.readdir(routersFolder, (err, files) => {
     files.forEach(file => {
-        console.log(file);
+        // console.log(file);
         alltags.push({ "name": file.split('.')[0] })
     });
 });
@@ -23,4 +25,12 @@ const doc = {
 const outputFile = './src/swagger/swagger-output.json'
 const endpointsFiles = ['./index.js']
 
-swaggerAutogen(outputFile, endpointsFiles, doc)
+const swaggerschema = require('./src/lib/swaggerschema')
+
+const asyncfun = async (outputFile, endpointsFiles, doc, schemaFolder) => {
+    await swaggerAutogen(outputFile, endpointsFiles, doc)
+    await swaggerschema(path.resolve(outputFile), path.resolve(schemaFolder))
+}
+
+const schemaFolder = './src/schema/'
+asyncfun(outputFile, endpointsFiles, doc, schemaFolder)

@@ -8,48 +8,41 @@ pool.on('error', err => {
     console.log('Database Connection Failed :', err); // ... error handler
 })
 
-const runSQL = async (sqlcode, allreq, schema) => {
-    if (!allreq) {
-        allreq = []
-    }
-    let output = []
-    sqlcode.match(/@(\S*) output/gi).map(m => output.push(m.split(' ')[0].replace('@', '')))
-    let input = []
-    sqlcode.match(/@(\S*)\S/gi).map(m => input.push(m.replace(',', '').replace('@', '')))
-    output.map(m => input = input.filter(f => f != m))
-    console.log(output, input)
-    if (input.filter(f => f == 'mid').length) { // 判斷是否需要取得 MID
-        allreq.mid = 1
-    }
-    console.log(allreq)
+const getMID = async (req) => {
 
-    const pool = await readonlyPoolPromise;
-    const request = pool.request();
-    input.map(i => request.input(i, sql[schema.filter(f => f.attr == i)[0].type], allreq[i]))
-    output.map(o => request.output(o, sql[schema.filter(f => f.attr == o)[0].type]))
-
-    const result = await request.query(sqlcode);
-    console.log(result)
+    const { passportCode } = req.session;
+    let mid = -1;
+    if(passportCode){
+        sqlcode = "select Account, MID from Member where MID = (select top 1 MID from MSession where PassportCode = @passportCode and ExpiredDT > (select convert(varchar, getdate(), 126)))"
+        const pool = await readonlyPoolPromise;
+        const request = pool.request();
+        request.input(passportCode, sql.NVarChar, passportCode)
+        const result = await request.query(sqlcode);
+        mid = result.recordset[0].MID
+    }
+    return mid // 回傳使用者MID
 }
 
 module.exports = async (sqlcode, req, schema) => {
-    console.log(req.params, req.query, req.body)
     let allreq = Object.assign(req.params, req.query, req.body)
+    allreq = JSON.stringify(allreq).toLowerCase();
+    allreq = JSON.parse(allreq);
 
     let output = []
-    sqlcode.match(/@(\S*) output/gi)?sqlcode.match(/@(\S*) output/gi).map(m => output.push(m.split(' ')[0].replace('@', ''))):""
+    sqlcode.match(/@(\S*) output/gi) ? sqlcode.match(/@(\S*) output/gi).map(m => output.push(m.split(' ')[0].replace('@', ''))) : ""
     let input = []
-    sqlcode.match(/@(\S*)\S/gi)?sqlcode.match(/@(\S*)\S/gi).map(m => input.push(m.replace(',', '').replace('@', ''))):""
-    output.map(m => input = input.filter(f => f != m))
+    sqlcode.match(/@(\S*)\S/gi) ? sqlcode.match(/@(\S*)\S/gi).map(m => input.push(m.replace(',', '').replace('@', ''))) : ""
+    output.map(m => input = input.filter(f => f != m)) // 把input過濾掉output的變數
 
+    console.log(input, output)
     if (input.filter(f => f == 'mid').length) { // 判斷是否需要取得 MID
-        allreq.mid = 1
+        allreq.mid = await getMID(req)
     }
 
     const pool = await readonlyPoolPromise;
     const request = pool.request();
-    input.map(i => request.input(i, sql[schema.filter(f => f.attr == i)[0].type], allreq[i]))
-    output.map(o => request.output(o, sql[schema.filter(f => f.attr == o)[0].type]))
+    input.map(i => i != 'mid' ? request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i)[0].type], allreq[i.toLowerCase()]) : request.input(i, sql.Int, allreq[i]))
+    output.map(o => request.output(o, sql[schema.filter(f => f.attr.toLowerCase() == o)[0].type]))
 
     const result = await request.query(sqlcode);
     return !result.recordset ? result.output : result.recordset;

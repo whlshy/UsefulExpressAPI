@@ -1,3 +1,8 @@
 [
-    { "attr": "mid", "type": "Int" }
+    { "attr": "mid", "type": "Int" },
+    { "attr": "a", "type": "Int" },
+    { "attr": "b", "type": "NVarChar" },
+    { "attr": "e", "type": "Int" },
+    { "attr": "c", "type": "Bit" },
+    { "attr": "d", "type": "VarChar" }
 ]

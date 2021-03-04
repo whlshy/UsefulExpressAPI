@@ -13,12 +13,6 @@
     },
     {
       "name": "file"
-    },
-    {
-      "name": "get"
-    },
-    {
-      "name": "post"
     }
   ],
   "schemes": [
@@ -32,34 +26,6 @@
         "tags": [],
         "description": "",
         "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/": {
-      "post": {
-        "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/hi/{id}": {
-      "get": {
-        "tags": [],
-        "description": "",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "type": "string"
-          },
-          {
-            "name": "filtro",
-            "in": "query",
-            "type": "string"
-          }
-        ],
         "responses": {}
       }
     },
@@ -79,20 +45,14 @@
           "account"
         ],
         "description": "",
-        "parameters": [
-          {
-            "name": "name1",
-            "in": "query",
-            "type": "string"
-          }
-        ],
+        "parameters": [],
         "responses": {}
       }
     },
-    "/api/name": {
-      "get": {
+    "/api/file/uploadIMG": {
+      "post": {
         "tags": [
-          "account"
+          "file"
         ],
         "description": "",
         "parameters": [],
