@@ -23,8 +23,10 @@ const getMID = async (req) => {
     return mid // 回傳使用者MID
 }
 
-module.exports = async (sqlcode, req, schema) => {
-    let allreq = Object.assign(req.params, req.query, req.body)
+module.exports = async (sqlcode, req = {}, schema = []) => {
+    let allreq = {}
+    if(req.params || req.query || req.body)
+        allreq = Object.assign(req.params, req.query, req.body)
     allreq = JSON.stringify(allreq).toLowerCase();
     allreq = JSON.parse(allreq);
 
@@ -34,7 +36,6 @@ module.exports = async (sqlcode, req, schema) => {
     sqlcode.match(/@(\S*)\S/gi) ? sqlcode.match(/@(\S*)\S/gi).map(m => input.push(m.replace(',', '').replace('@', ''))) : ""
     output.map(m => input = input.filter(f => f != m)) // 把input過濾掉output的變數
 
-    console.log(input, output)
     if (input.filter(f => f == 'mid').length) { // 判斷是否需要取得 MID
         allreq.mid = await getMID(req)
     }

@@ -13,6 +13,9 @@
     },
     {
       "name": "file"
+    },
+    {
+      "name": "travel"
     }
   ],
   "schemes": [
@@ -53,6 +56,26 @@
       "post": {
         "tags": [
           "file"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/travel/example": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/travel/getcity": {
+      "get": {
+        "tags": [
+          "travel"
         ],
         "description": "",
         "parameters": [],

@@ -25,9 +25,11 @@ app.get('/', (req, res) => {
 
 var accountRouter = require('./src/routers/account');
 var fileRouter = require('./src/routers/file');
+var travelRouter = require('./src/routers/travel');  // 引入 travel.js
 
 app.use('/api', accountRouter)
 app.use('/api', fileRouter)
+app.use('/api', travelRouter)                        // 新增 router 路徑
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./src/swagger/swagger-output.json') // swagger autogen 輸出的 JSON

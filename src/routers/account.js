@@ -12,7 +12,6 @@ router.get('/me', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
     // #swagger.tags = ['account']
-    console.log(req.body, req.query)
     res.json({ status: 1, message: "logount susccess" });
 });
 

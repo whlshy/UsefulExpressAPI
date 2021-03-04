@@ -7,8 +7,10 @@
 - [Usage](#usage)
   - [DataBase Config](#dbconfig)
   - [Swagger Setting](#Swagger)
-  - [Add New Router](#Router)
   - [執行](#執行)
+  - [Add New Router](#Router)
+  - [Run SQL and Schema](#SQL&Schema)
+
 
 ## Installation
 全域安裝套件。
@@ -23,13 +25,13 @@ npm i
 ### dbconfig
 資料庫：MSSQL
 
-**File：dbconfig.json**
+**設定連線資訊 File：dbconfig.json**
 ```json
 {
-    "user": "travel",                // MSSQL 帳號
-    "password": ".travel.",          // MSSQL 密碼
-    "server": "10.21.20.101",        // MSSQL 位置
-    "database": "TravelTest_6",      // MSSQL 資料庫名稱
+    "user": "travel",
+    "password": ".travel.",
+    "server": "10.21.20.101",
+    "database": "TravelTest_6",
     "options": {
         "encrypt": true,
         "enableArithAbort": true
@@ -99,3 +101,35 @@ Add router for travel.js
 var travelRouter = require('./src/routers/travel');  // 引入 travel.js
 app.use('/api', travelRouter)                        // 新增 router 路徑
 ```
+重新生成 Swagger UI 後打開連結文件測試API
+
+[localhost:3000/api-doc](http://localhost:3000/api-doc)
+
+或者直接貼上網址
+
+[localhost:3000/api/travel/example](http://localhost:3000/api/travel/example)
+
+![image](https://user-images.githubusercontent.com/49122960/109974869-f826dd00-7d34-11eb-8292-8213d10eff9c.png)
+
+### SQL&Schema
+如果想要執行 SQL 語法
+
+**require('../lib/runSQL')**
+
+**File: travel.js**
+```js
+var express = require('express');
+var router = express.Router();
+var runSQL = require('../lib/runSQL')
+
+router.get('/travel/getcity', async (req, res, next) => {  // method GET
+    // #swagger.tags = ['travel']
+    let sqlcode = "select CID, CName, NamePath from Class where nLevel = 3" // 要執行的 SQL 語法
+    let response = await runSQL(sqlcode)
+    res.json(response)
+});
+
+module.exports = router;
+```
+![image](https://user-images.githubusercontent.com/49122960/109981207-a9307600-7d3b-11eb-92f4-d450a5f609a0.png)
+

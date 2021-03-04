@@ -1,8 +1,8 @@
 {
-    "user": "sa",
-    "password": "!a5566423",
-    "server": "10.21.25.71", 
-    "database": "EDU_Technology",
+    "user": "travel",
+    "password": ".travel.",
+    "server": "10.21.20.101",
+    "database": "TravelTest_6",
     "options": {
         "encrypt": true,
         "enableArithAbort": true
