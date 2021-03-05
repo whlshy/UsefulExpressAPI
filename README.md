@@ -13,6 +13,7 @@
     - [runSQL](#runSQL)
     - [Schema](#Schema)
     - [Use Schema](#UseSchema)
+- [Example](#Example)
 
 
 ## Installation
@@ -174,7 +175,8 @@ module.exports = router;
 const schema = require('../schema/travel.json')  // travel.js 用到的 sql 變數都會在這個 travel.json 當中定義
 ```
 
-**Example: getCCData GET**
+## Example
+**getCCData GET**
 ```js
 const schema = require('../schema/travel.json')  // 作為 runSQL 中第三個參數
 
@@ -188,9 +190,9 @@ router.get('/travel/getCCData', async (req, res, next) => {  // method GET
 ```
 ![image](https://user-images.githubusercontent.com/49122960/109989492-82763d80-7d43-11eb-84ad-6b7ec3ace3ff.png)
 
-**Example: getCOData POST**
+**getCOData POST**
 ```js
-router.post('/travel/getCOData', async (req, res, next) => {  // method GET
+router.post('/travel/getCOData', async (req, res, next) => {  // method POST
     // #swagger.tags = ['travel']
     let { cid } = req.body  // 為 swagger ui 宣告有一個 body 叫 cid
     let sqlcode = "select C.NamePath 'namepath', O.OID 'oid', O.Title 'title', O.Class 'district' from Class C, CO, Object O where C.CID = CO.CID and CO.OID = O.OID and C.CID = @cid" // 要執行的 SQL 語法
