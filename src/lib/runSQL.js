@@ -42,7 +42,7 @@ module.exports = async (sqlcode, req = {}, schema = []) => {
 
     const pool = await readonlyPoolPromise;
     const request = pool.request();
-    input.map(i => i != 'mid' ? request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i)[0].type], allreq[i.toLowerCase()]) : request.input(i, sql.Int, allreq[i]))
+    input.map(i => i != 'mid' ? request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i.toLowerCase())[0].type], allreq[i.toLowerCase()]) : request.input(i, sql.Int, allreq[i]))
     output.map(o => request.output(o, sql[schema.filter(f => f.attr.toLowerCase() == o)[0].type]))
 
     const result = await request.query(sqlcode);
