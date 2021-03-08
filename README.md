@@ -1,6 +1,6 @@
 # UsefulExpressAPI
 
-利用 Express 與 Swagger 結合起來的 API Model，並可以自動產生出 Swagger 文件與配合 schema 所定義的型別。
+利用 Express 與 Swagger 結合起來的 API Model，才用 REST API 原則，並可以自動產生出 Swagger 文件與配合 schema 所定義的型別。
 
 ## Contents
 - [Installation](#installation)
