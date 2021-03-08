@@ -17,6 +17,9 @@ module.exports = (outputFile, schemaFolder) => {
                                     if (type == 'Int') {
                                         type = 'integer'
                                     }
+                                    if (type == 'Float'){
+                                        type = 'number'
+                                    }
                                     if (type == 'NVarChar' || type == 'VarChar') {
                                         type = 'string'
                                     }
@@ -32,6 +35,9 @@ module.exports = (outputFile, schemaFolder) => {
                                                 let objtype = schema.filter(s => s.attr == objvalue)[0].type
                                                 if (objtype == 'Int') {
                                                     objtype = 'integer'
+                                                }
+                                                if (objtype == 'Float'){
+                                                    objtype = 'number'
                                                 }
                                                 if (objtype == 'NVarChar' || objtype == 'VarChar') {
                                                     objtype = 'string'
