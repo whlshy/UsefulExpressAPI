@@ -40,6 +40,7 @@ module.exports = (outputFile, schemaFolder) => {
                                                     objtype = 'boolean'
                                                 }
                                                 value.schema.properties[objvalue].type = objtype;
+                                                delete value.schema.properties[objvalue]['example']
                                             }
                                         })
                                     }

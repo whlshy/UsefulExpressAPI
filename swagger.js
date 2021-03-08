@@ -1,5 +1,5 @@
 // swaggerAutogen
-const swaggerAutogen = require('./src/lib/swagger-autogen/swagger-autogen')()
+const swaggerAutogen = require('swagger-autogen')()
 const fs = require('fs');
 var path = require('path');
 
