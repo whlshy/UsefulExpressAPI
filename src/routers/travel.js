@@ -31,4 +31,18 @@ router.post('/travel/getCOData', async (req, res, next) => {  // method POST
     res.json(response)
 });
 
+router.route('/book')  // restful api example
+    .get(function (req, res) {
+        // #swagger.tags = ['travel']
+        res.send('Get a random book');
+    })
+    .post(function (req, res) {
+        // #swagger.tags = ['travel']
+        res.send('Add a book');
+    })
+    .put(function (req, res) {
+        // #swagger.tags = ['travel']
+        res.send('Update the book');
+    });
+
 module.exports = router;
