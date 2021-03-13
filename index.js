@@ -1,6 +1,6 @@
 const express = require('express')
 const app = express()
-const port = 3000
+const port = require('./config').port
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -23,9 +23,9 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 
-var accountRouter = require('./src/routers/account');
-var fileRouter = require('./src/routers/file');
-var travelRouter = require('./src/routers/travel');  // 引入 travel.js
+var accountRouter = require('./src/controllers/account');
+var fileRouter = require('./src/controllers/file');
+var travelRouter = require('./src/controllers/travel');  // 引入 travel.js
 
 app.use('/api', accountRouter)
 app.use('/api', fileRouter)

@@ -30,6 +30,8 @@ const storage = multer.diskStorage({
 
 router.post('/file/uploadIMG', multer({ storage: storage }).single('files'), async (req, res, next) => {
     // #swagger.tags = ['file']
+    // #swagger.consumes = "multipart/form-data"
+    let { upfile } = req.body
     res.json(response);
 });
 

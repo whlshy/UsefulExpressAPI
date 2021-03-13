@@ -1,0 +1,13 @@
+{
+    "dbconfig": {
+        "user": "travel",
+        "password": ".travel.",
+        "server": "10.21.20.101",
+        "database": "TravelTest_6",
+        "options": {
+            "encrypt": true,
+            "enableArithAbort": true
+        }
+    },
+    "port": 3000
+}

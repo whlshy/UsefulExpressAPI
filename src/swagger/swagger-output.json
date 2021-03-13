@@ -7,17 +7,7 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "tags": [
-    {
-      "name": "account"
-    },
-    {
-      "name": "file"
-    },
-    {
-      "name": "travel"
-    }
-  ],
+  "tags": [],
   "schemes": [
     "http"
   ],
@@ -58,6 +48,9 @@
           "file"
         ],
         "description": "",
+        "consumes": [
+          null
+        ],
         "parameters": [],
         "responses": {}
       }
@@ -118,6 +111,32 @@
             }
           }
         ],
+        "responses": {}
+      }
+    },
+    "/api/book": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
         "responses": {}
       }
     }

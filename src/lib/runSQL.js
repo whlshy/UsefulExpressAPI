@@ -1,5 +1,5 @@
 let sql = require("mssql");
-const readonlyconfig = require('../../dbconfig.json');
+const readonlyconfig = require('../../config.json').dbconfig;
 
 // mssql 連線
 const pool = new sql.ConnectionPool(readonlyconfig);
