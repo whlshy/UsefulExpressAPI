@@ -3,7 +3,7 @@ var router = express.Router();
 var multer = require('multer')
 
 var runSQL = require('../lib/runSQL')
-var schema = require('../schema/file.json')
+var schema = require('../schema/File.json')
 
 const mkdirfilepath = (path) => {
     patharray = path.split('/')
@@ -12,6 +12,7 @@ const mkdirfilepath = (path) => {
 }
 
 var datenow = Date.now()
+var oid = ""
 const storage = multer.diskStorage({
     destination: async (req, file, cb) => {
         var filename = file.fieldname + '-' + datenow + '.' + String(file.mimetype).split('/')[1]
@@ -20,18 +21,20 @@ const storage = multer.diskStorage({
         allreq.query = { FileName: filename, FileExtension: `.{file.mimetype.split('/')[1]}`, ContentLen: file.size, ContentType: file.mimetype }
         let response = await runSQL(sqlcode, allreq, schema);
         console.log(response)
-        cb(null, './FileStorage/img')
+        let path = __dirname + '/fileStorage'
+        response.NewOID.toString(16).padStart(8, '0').match(/\S\S/gi).map((m, index) => index != 3 ? path += `/${m}` : oid = m)
+        mkdirfilepath(path)
+        cb(null, path)
     },
     filename: function (req, file, cb) {
         console.log(String(file.mimetype).split('/')[1])
-        cb(null, file.fieldname + '-' + datenow + '.' + String(file.mimetype).split('/')[1])
+        cb(null, oid + '.' + String(file.mimetype).split('/')[1])
     }
 })
 
 router.post('/file/uploadIMG', multer({ storage: storage }).single('files'), async (req, res, next) => {
     // #swagger.tags = ['file']
     // #swagger.consumes = "multipart/form-data"
-    let { upfile } = req.body
     res.json(response);
 });
 

@@ -19,10 +19,6 @@ app.use(session({
     },
 }));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!')
-})
-
 var accountRouter = require('./src/controllers/account');
 var fileRouter = require('./src/controllers/file');
 var travelRouter = require('./src/controllers/travel');  // 引入 travel.js
@@ -34,6 +30,19 @@ app.use('/api', travelRouter)                        // 新增 router 路徑
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./src/swagger/swagger-output.json') // swagger autogen 輸出的 JSON
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
+// 取得app頁面
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + '/public/app/index.html');
+});
+
+// 設定public的檔案路徑
+app.use(express.static(__dirname + '/public'));
+
+// 取得app頁面(對於任何的url)
+app.get("*", (req, res) => {
+    res.sendFile(__dirname + '/public/index.html');
+});
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
