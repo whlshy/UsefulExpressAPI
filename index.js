@@ -38,6 +38,7 @@ app.get("/", (req, res) => {
 
 // 設定public的檔案路徑
 app.use(express.static(__dirname + '/public'));
+app.use('/filestorage', express.static(__dirname + '/public/filestorage'));
 
 // 取得app頁面(對於任何的url)
 app.get("*", (req, res) => {
