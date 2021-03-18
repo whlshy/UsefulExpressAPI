@@ -24,9 +24,10 @@ const getMID = async (req) => {
 
 module.exports = async (sqlcode, req = {}, schema = []) => {
     let allreq = {}
-    Object.keys(req).map(m => { if (m != 'params' && m != 'qurey' && m != 'body') allreq[m] = req[m] })
     if (req.params || req.query || req.body)
         allreq = Object.assign(req.params, req.query, req.body)
+    else
+        Object.keys(req).map(m => allreq[m] = req[m])
     allreq = JSON.stringify(allreq).toLowerCase();
     allreq = JSON.parse(allreq);
 
