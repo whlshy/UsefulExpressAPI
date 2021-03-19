@@ -15,7 +15,7 @@ const getMID = async (req) => {
         sqlcode = "select Account, MID from Member where MID = (select top 1 MID from MSession where PassportCode = @passportCode and ExpiredDT > (select convert(varchar, getdate(), 126)))"
         const pool = await readonlyPoolPromise;
         const request = pool.request();
-        request.input(passportCode, sql.NVarChar, passportCode)
+        request.input('passportCode', sql.NVarChar, passportCode)
         const result = await request.query(sqlcode);
         mid = result.recordset[0].MID
     }
