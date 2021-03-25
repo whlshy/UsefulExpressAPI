@@ -7,18 +7,24 @@ app.use(bodyParser.urlencoded({ extended: true }));
 const { mode, host, port } = require('./config');
 
 let cors = require('cors')
-app.use(cors())
-if(mode == "http"){
+
+if (mode == "http") {
     app.use(cors())
 }
-else if(mode == "https"){
-    app.use(cors({
-        origin: [
-            `https://${host}`,
-        ],
-        credentials: true, // enable set cookie
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
-    }));
+else if (mode == "https") {
+
+    var whitelist = [
+        `https://${host}`,
+    ];
+    var corsOptions = {
+        origin: function (origin, callback) {
+            var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+            callback(null, originIsWhitelisted);
+        },
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        credentials: true
+    };
+    app.use(cors(corsOptions));
 }
 
 // session setting
