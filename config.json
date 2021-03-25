@@ -9,5 +9,7 @@
             "enableArithAbort": true
         }
     },
+    "mode": "http",
+    "host": "localhost",
     "port": 3000
 }

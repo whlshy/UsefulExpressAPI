@@ -1,9 +1,25 @@
 const express = require('express')
 const app = express()
-const port = require('./config').port
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+const { mode, host, port } = require('./config');
+
+let cors = require('cors')
+app.use(cors())
+if(mode == "http"){
+    app.use(cors())
+}
+else if(mode == "https"){
+    app.use(cors({
+        origin: [
+            `https://${host}`,
+        ],
+        credentials: true, // enable set cookie
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS'
+    }));
+}
 
 // session setting
 var session = require('express-session');
@@ -15,17 +31,17 @@ app.use(session({
         httpOnly: false,
         secure: false,
         maxAge: 1000 * 60 * 60 * 24, // 設定 session 的有效時間，單位毫秒 (1000 * 60 = 1分鐘)
-        sameSite: "none"
+        sameSite: "lax"
     },
 }));
 
-var accountRouter = require('./src/controllers/account');
-var fileRouter = require('./src/controllers/file');
-var travelRouter = require('./src/controllers/travel');  // 引入 travel.js
+var Account = require('./src/controllers/account');
+var File = require('./src/controllers/file');
+var Travel = require('./src/controllers/travel');  // 引入 travel.js
 
-app.use('/api', accountRouter)
-app.use('/api', fileRouter)
-app.use('/api', travelRouter)                        // 新增 router 路徑
+app.use('/api', Account)
+app.use('/api', File)
+app.use('/api', Travel)                        // 新增 router 路徑
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./src/swagger/swagger-output.json') // swagger autogen 輸出的 JSON
@@ -63,6 +79,17 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-})
+if (mode == "http") {
+    app.listen(port, () => {
+        console.log(`Example app listening at http://${host}:${port}`)
+    })
+}
+else if (mode == "https") {
+    var options = {
+        pfx: fs.readFileSync('example.pfx'),
+        passphrase: 'example'
+    };
+    https.createServer(options, app).listen(port, () => {
+        console.log(`Example app listening at https://${host}:${port}`)
+    });
+}

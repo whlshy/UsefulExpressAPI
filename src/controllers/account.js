@@ -10,8 +10,13 @@ router.get('/me', async (req, res, next) => {
     res.json(response);
 });
 
-router.post('/logout', async (req, res, next) => {
+router.get('/logout', async (req, res, next) => {
     // #swagger.tags = ['account']
+    req.session.destroy(function(err) {
+        // cannot access session here
+        console.log(err)
+     });
+    req.session = null
     res.json({ status: 1, message: "logount susccess" });
 });
 

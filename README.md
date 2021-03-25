@@ -8,7 +8,7 @@
   - [DataBase Config](#dbconfig)
   - [Swagger Setting](#Swagger)
   - [執行](#執行)
-  - [Add New Router](#Router)
+  - [Add New Controller](#Controller)
   - [Run SQL and Schema](#SQL_and_Schema)
     - [runSQL](#runSQL)
     - [Schema](#Schema)
@@ -80,12 +80,12 @@ or use nodemon (修改文件不用重新啟動)
 nodemon .\index.js
 ```
 
-### Router
-新增 Router
+### Controller
+新增 Controller
 
-在 ./src/routers 資料夾中建立新的 js
+在 ./src/controllers 資料夾中建立新的 js
 
-**Exameple：create new file travel.js in './src/routers'**
+**Exameple：create new file travel.js in './src/controllers'**
 ```js
 var express = require('express');
 var router = express.Router();
@@ -102,8 +102,8 @@ Add router for travel.js
 
 **File：index.js**
 ```js
-var travelRouter = require('./src/routers/travel');  // 引入 travel.js
-app.use('/api', travelRouter)                        // 新增 router 路徑
+var Travel = require('./src/routers/travel');  // 引入 travel.js
+app.use('/api', Travel)                        // 新增 router 路徑
 ```
 重新生成 Swagger UI 後打開連結文件測試API
 
