@@ -2,14 +2,13 @@
 const swaggerAutogen = require('swagger-autogen')()
 const fs = require('fs');
 var path = require('path');
-const port = require('./config').port
 
 const doc = {
     info: {
         title: "Express API Document",
         description: "Description"
     },
-    host: `localhost:${port}`,
+    host: null,
     schemes: ['http']
 }
 
