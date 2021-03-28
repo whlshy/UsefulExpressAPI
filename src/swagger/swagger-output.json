@@ -33,7 +33,7 @@
       }
     },
     "/api/logout": {
-      "post": {
+      "get": {
         "tags": [
           "account"
         ],
@@ -45,13 +45,22 @@
     "/api/file/uploadIMG": {
       "post": {
         "tags": [
-          "file"
+          "File"
         ],
+        "summary": "上傳圖片",
         "description": "",
         "consumes": [
-          null
+          "multipart/form-data"
         ],
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": true,
+            "type": "file"
+          }
+        ],
         "responses": {}
       }
     },
