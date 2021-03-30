@@ -2,6 +2,15 @@
 const swaggerAutogen = require('swagger-autogen')()
 const fs = require('fs');
 var path = require('path');
+const { mode } = require('./config');
+
+const routersFolder = './src/controllers';
+let alltags = []
+fs.readdir(routersFolder, (err, files) => {
+    files.forEach(file => {
+        alltags.push({ "name": file.split('.')[0] })
+    });
+});
 
 const doc = {
     info: {
@@ -9,7 +18,8 @@ const doc = {
         description: "Description"
     },
     host: null,
-    schemes: ['http']
+    schemes: [mode],
+    tags: alltags
 }
 
 const outputFile = './src/swagger/swagger-output.json'

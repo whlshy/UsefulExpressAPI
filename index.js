@@ -59,12 +59,12 @@ app.get("/", (req, res) => {
 });
 
 // 設定public的檔案路徑
-app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public/app'));
 app.use('/filestorage', express.static(__dirname + '/public/filestorage'));
 
 // 取得app頁面(對於任何的url)
 app.get("*", (req, res) => {
-    res.sendFile(__dirname + '/public/index.html');
+    res.sendFile(__dirname + '/public/app/index.html');
 });
 
 // catch 404 and forward to error handler
