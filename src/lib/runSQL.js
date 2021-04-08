@@ -9,31 +9,37 @@ pool.on('error', err => {
 })
 
 const getMID = async (req) => {
-    const { passportCode } = req.session;
+    let passportCode = null
     let mid = -1;
-    if (passportCode) {
+    req.session ? { passportCode } = req.session : mid = -1;
+
+    if (!!passportCode) {
         sqlcode = "select Account, MID from Member where MID = (select top 1 MID from MSession where PassportCode = @passportCode and ExpiredDT > (select convert(varchar, getdate(), 126)))"
         const pool = await readonlyPoolPromise;
         const request = pool.request();
-        request.input('passportCode', sql.NVarChar, passportCode)
+        request.input(passportCode, sql.NVarChar, passportCode)
         const result = await request.query(sqlcode);
         mid = result.recordset[0].MID
     }
-    return mid // 回傳使用者MID
+    return 1 // 回傳使用者MID
 }
 
 module.exports = async (sqlcode, req = {}, schema = []) => {
     let allreq = {}
-    if (req.params || req.query || req.body)
-        allreq = Object.assign(req.params, req.query, req.body)
+    if (!!req.params || !!req.query || !!req.body)
+        allreq = Object.assign(!!req.params ? req.params : {}, !!req.query ? req.query : {}, !!req.body ? req.body : {})
     else
         Object.keys(req).map(m => allreq[m] = req[m])
-    allreq = JSON.stringify(allreq).toLowerCase();
-    allreq = JSON.parse(allreq);
+    let newallreq = {}
+    Object.keys(allreq).map(m => newallreq[m.toLowerCase()] = allreq[m])
+    allreq = newallreq;
 
     let output = []
     sqlcode.match(/@(\S*) output/gi) ? sqlcode.match(/@(\S*) output/gi).map(m => output.push(m.split(' ')[0].replace('@', ''))) : ""
     let input = []
+
+    console.log(allreq)
+
     sqlcode.match(/@(\S*)\S/gi) && sqlcode.match(/@(\S*)\S/gi).map(m =>
         input.push(m.replace('@', '').split(/\(|\)|\{|\}|\[|\]|\/|\\|\;|\:|\!|\@|\$|\#|\=|\?|\+|\,|\||\&|\t|\n| /)[0].replace(/(\s*)/g, '')))
     output.map(m => input = input.filter(f => f != m)) // 把input過濾掉output的變數
@@ -42,17 +48,13 @@ module.exports = async (sqlcode, req = {}, schema = []) => {
         allreq.mid = await getMID(req)
     }
 
-    try {
-        const pool = await readonlyPoolPromise;
-        const request = pool.request();
-        input.map(i => i != 'mid' ? request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i.toLowerCase())[0].type], allreq[i.toLowerCase()]) : request.input(i, sql.Int, allreq[i]))
-        output.map(o => request.output(o, sql[schema.filter(f => f.attr.toLowerCase() == o.toLowerCase())[0].type]))
+    const pool = await readonlyPoolPromise;
+    const request = pool.request();
+    input.map(i => i != 'mid' ?
+        request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i.toLowerCase())[0].type], allreq[i.toLowerCase()]) :
+        request.input(i, sql.Int, allreq[i]))
+    output.map(o => request.output(o, sql[schema.filter(f => f.attr.toLowerCase() == o.toLowerCase())[0].type]))
 
-        const result = await request.query(sqlcode);
-        return !result.recordset ? result.output : result.recordset;
-    }
-    catch (err) {
-        console.log(err)
-        return { state: 0, message: "API輸入格式錯誤，請詳細檢查相關變數或參數型別。" }
-    }
+    const result = await request.query(sqlcode);
+    return !result.recordset ? result.output : result.recordset;
 };
