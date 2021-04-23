@@ -1,12 +1,22 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "Express API Document",
+    "title": "EDU Technology API Document",
     "description": "Description",
     "version": "1.0.0"
   },
   "basePath": "/",
-  "tags": [],
+  "tags": [
+    {
+      "name": "Account"
+    },
+    {
+      "name": "File"
+    },
+    {
+      "name": "Travel"
+    }
+  ],
   "schemes": [
     "http"
   ],
@@ -16,133 +26,6 @@
     "/": {
       "get": {
         "tags": [],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/me": {
-      "get": {
-        "tags": [
-          "account"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/logout": {
-      "get": {
-        "tags": [
-          "account"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/file/uploadIMG": {
-      "post": {
-        "tags": [
-          "File"
-        ],
-        "summary": "上傳圖片",
-        "description": "",
-        "consumes": [
-          "multipart/form-data"
-        ],
-        "parameters": [
-          {
-            "name": "file",
-            "in": "formData",
-            "description": "file",
-            "required": true,
-            "type": "file"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/api/travel/example": {
-      "get": {
-        "tags": [
-          "travel"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/travel/getcity": {
-      "get": {
-        "tags": [
-          "travel"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      }
-    },
-    "/api/travel/getCCData": {
-      "get": {
-        "tags": [
-          "travel"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "cid",
-            "in": "query",
-            "type": "integer"
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/api/travel/getCOData": {
-      "post": {
-        "tags": [
-          "travel"
-        ],
-        "description": "",
-        "parameters": [
-          {
-            "name": "obj",
-            "in": "body",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "cid": {
-                  "type": "integer"
-                }
-              }
-            }
-          }
-        ],
-        "responses": {}
-      }
-    },
-    "/api/book": {
-      "get": {
-        "tags": [
-          "travel"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
-      "post": {
-        "tags": [
-          "travel"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
-      "put": {
-        "tags": [
-          "travel"
-        ],
         "description": "",
         "parameters": [],
         "responses": {}

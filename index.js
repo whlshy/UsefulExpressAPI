@@ -1,18 +1,18 @@
 const express = require('express')
 const app = express()
+let fs = require('fs');
+var https = require('https')
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: true }))
 
 const { mode, host, port } = require('./config');
 
 let cors = require('cors')
-
 if (mode == "http") {
     app.use(cors())
 }
 else if (mode == "https") {
-
     var whitelist = [
         `https://${host}`,
     ];
@@ -40,18 +40,16 @@ app.use(session({
         sameSite: "lax"
     },
 }));
+app.use(express.json());
 
-var Account = require('./src/controllers/account');
-var File = require('./src/controllers/file');
-var Travel = require('./src/controllers/travel');  // 引入 travel.js
+var index = require('./src/controllers/index');
+app.use('/', index)
 
-app.use('/api', Account)
-app.use('/api', File)
-app.use('/api', Travel)                        // 新增 router 路徑
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerFile = require('./src/swagger/swagger-output.json') // swagger autogen 輸出的 JSON
 app.use('/api-doc', swaggerUi.serve, swaggerUi.setup(swaggerFile))
+
 
 // 取得app頁面
 app.get("/", (req, res) => {
@@ -66,6 +64,7 @@ app.use('/filestorage', express.static(__dirname + '/public/filestorage'));
 app.get("*", (req, res) => {
     res.sendFile(__dirname + '/public/app/index.html');
 });
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -85,6 +84,7 @@ app.use(function (err, req, res, next) {
     res.render('error');
 });
 
+
 if (mode == "http") {
     app.listen(port, () => {
         console.log(`Example app listening at http://${host}:${port}`)
@@ -92,8 +92,8 @@ if (mode == "http") {
 }
 else if (mode == "https") {
     var options = {
-        pfx: fs.readFileSync('example.pfx'),
-        passphrase: 'example'
+        pfx: fs.readFileSync('wke.csie.ncnu.edu.tw_PFX.pfx'),
+        passphrase: 'a01014220'
     };
     https.createServer(options, app).listen(port, () => {
         console.log(`Example app listening at https://${host}:${port}`)

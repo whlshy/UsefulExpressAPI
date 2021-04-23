@@ -21,7 +21,7 @@ const getMID = async (req) => {
         const result = await request.query(sqlcode);
         mid = result.recordset[0].MID
     }
-    return 1 // 回傳使用者MID
+    return mid // 回傳使用者MID
 }
 
 module.exports = async (sqlcode, req = {}, schema = []) => {
@@ -38,7 +38,6 @@ module.exports = async (sqlcode, req = {}, schema = []) => {
     sqlcode.match(/@(\S*) output/gi) ? sqlcode.match(/@(\S*) output/gi).map(m => output.push(m.split(' ')[0].replace('@', ''))) : ""
     let input = []
 
-    console.log(allreq)
 
     sqlcode.match(/@(\S*)\S/gi) && sqlcode.match(/@(\S*)\S/gi).map(m =>
         input.push(m.replace('@', '').split(/\(|\)|\{|\}|\[|\]|\/|\\|\;|\:|\!|\@|\$|\#|\=|\?|\+|\,|\||\&|\t|\n| /)[0].replace(/(\s*)/g, '')))
