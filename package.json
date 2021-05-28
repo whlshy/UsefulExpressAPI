@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon .\\index.js",
-    "reflesh swagger": "node swagger.js"
+    "reflesh swagger": "node swagger.js",
+    "build": "webpack --mode production"
   },
   "repository": {
     "type": "git",
@@ -28,5 +29,10 @@
     "swagger-autogen": "^2.7.6",
     "swagger-schemagen": "^1.0.4",
     "swagger-ui-express": "^4.1.6"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^9.0.0",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.0"
   }
 }

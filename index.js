@@ -86,7 +86,7 @@ app.use(function (err, req, res, next) {
 
 
 if (mode == "http") {
-    app.listen(port, () => {
+    app.listen((process.env.PORT || port), () => {
         console.log(`Example app listening at http://${host}:${port}`)
     })
 }
@@ -95,7 +95,7 @@ else if (mode == "https") {
         pfx: fs.readFileSync('wke.csie.ncnu.edu.tw_PFX.pfx'),
         passphrase: 'a01014220'
     };
-    https.createServer(options, app).listen(port, () => {
+    https.createServer(options, app).listen((process.env.PORT || port), () => {
         console.log(`Example app listening at https://${host}:${port}`)
     });
 }
