@@ -9,23 +9,18 @@ app.use(bodyParser.urlencoded({ extended: true }))
 const { mode, host, port } = require('./config');
 
 let cors = require('cors')
-if (mode == "http") {
-    app.use(cors())
-}
-else if (mode == "https") {
-    var whitelist = [
-        `https://${host}`,
-    ];
-    var corsOptions = {
-        origin: function (origin, callback) {
-            var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
-            callback(null, originIsWhitelisted);
-        },
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
-        credentials: true
-    };
-    app.use(cors(corsOptions));
-}
+var whitelist = [
+    `https://${host}`,
+];
+var corsOptions = {
+    origin: function (origin, callback) {
+        var originIsWhitelisted = whitelist.indexOf(origin) !== -1;
+        callback(null, originIsWhitelisted);
+    },
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    credentials: true
+};
+app.use(cors(corsOptions));
 
 // session setting
 var session = require('express-session');
