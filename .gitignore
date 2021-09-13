@@ -4,3 +4,4 @@ public/filestorage/*
 !public/filestorage/.gitkeep
 src/swagger/*
 !src/swagger/.gitkeep
+dist
