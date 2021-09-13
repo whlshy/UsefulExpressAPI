@@ -98,11 +98,11 @@ router.get('/travel/example', async (req, res, next) => {  // method GET
 module.exports = router;
 ```
 
-Add router for travel.js
+Add router for Travel.js
 
-**File：index.js**
+**File：./src/controllers/index.js**
 ```js
-var Travel = require('./src/routers/travel');  // 引入 travel.js
+var Travel = require('./Travel');  // 引入 Travel.js
 app.use('/api', Travel)                        // 新增 router 路徑
 ```
 重新生成 Swagger UI 後打開連結文件測試API
