@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
         allreq.query = { FileName: filename, FileExtension: `.{file.mimetype.split('/')[1]}`, ContentLen: file.size, ContentType: file.mimetype }
         let response = await runSQL(sqlcode, allreq, schema);
         console.log(response)
-        let path = __dirname + '/fileStorage'
+        let path = './public/fileStorage'
         response.NewOID.toString(16).padStart(8, '0').match(/\S\S/gi).map((m, index) => index != 3 ? path += `/${m}` : oid = m)
         mkdirfilepath(path)
         cb(null, path)
