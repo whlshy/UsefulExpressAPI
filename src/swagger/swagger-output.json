@@ -30,6 +30,134 @@
         "parameters": [],
         "responses": {}
       }
+    },
+    "/api/me": {
+      "get": {
+        "tags": [
+          "account"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/logout": {
+      "get": {
+        "tags": [
+          "account"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/file/uploadIMG": {
+      "post": {
+        "tags": [
+          "file"
+        ],
+        "summary": "上傳圖片",
+        "description": "",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "description": "file",
+            "required": true,
+            "type": "file"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/travel/example": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/travel/getcity": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/travel/getCCData": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "cid",
+            "in": "query",
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/travel/getCOData": {
+      "post": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "cid": {
+                  "type": "string",
+                  "example": "any"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/book": {
+      "get": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      },
+      "put": {
+        "tags": [
+          "travel"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
     }
   },
   "definitions": {}
