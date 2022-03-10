@@ -24,7 +24,7 @@ const getMID = async (req) => {
     return mid // 回傳使用者MID
 }
 
-module.exports = async (sqlcode, req = {}, schema = []) => {
+const runSQL = async (sqlcode, req = {}, schema = [], options = {}) => {
     let allreq = {}
     if (!!req.params || !!req.query || !!req.body)
         allreq = Object.assign(!!req.params ? req.params : {}, !!req.query ? req.query : {}, !!req.body ? req.body : {})
@@ -38,22 +38,30 @@ module.exports = async (sqlcode, req = {}, schema = []) => {
     sqlcode.match(/@(\S*) output/gi) ? sqlcode.match(/@(\S*) output/gi).map(m => output.push(m.split(' ')[0].replace('@', ''))) : ""
     let input = []
 
-
-    sqlcode.match(/@(\S*)\S/gi) && sqlcode.match(/@(\S*)\S/gi).map(m =>
-        input.push(m.replace('@', '').split(/\(|\)|\{|\}|\[|\]|\/|\\|\;|\:|\!|\@|\$|\#|\=|\?|\+|\,|\||\&|\t|\n| /)[0].replace(/(\s*)/g, '')))
+    sqlcode.match(/@(\S*)\S/gi) && sqlcode.match(/@(\S*)\S/gi).map(m => {
+        let newparameter = m.replace('@', '').split(/\(|\)|\{|\}|\[|\]|\/|\\|\;|\:|\!|\@|\$|\#|\=|\?|\+|\,|\||\&|\t|\n| /)[0].replace(/(\s*)/g, '')
+        if (input.filter(f => f == newparameter).length == 0)
+            input.push(newparameter)
+    })
     output.map(m => input = input.filter(f => f != m)) // 把input過濾掉output的變數
 
     if (input.filter(f => f == 'mid').length) { // 判斷是否需要取得 MID
         allreq.mid = await getMID(req)
     }
-
+    // console.log(input, sqlcode, allreq)
     const pool = await readonlyPoolPromise;
     const request = pool.request();
     input.map(i => i != 'mid' ?
-        request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i.toLowerCase())[0].type], allreq[i.toLowerCase()]) :
+        (!(schema.filter(f => f.attr.toLowerCase() == i.toLowerCase())[0]) && console.log('"' + sqlcode + '" 當中，' + i + " 沒有被定義"),
+            request.input(i, sql[schema.filter(f => f.attr.toLowerCase() == i.toLowerCase())[0].type],
+                allreq[i.toLowerCase()] !== undefined && allreq[i.toLowerCase()] !== null ? allreq[i.toLowerCase()] : null)) :
         request.input(i, sql.Int, allreq[i]))
     output.map(o => request.output(o, sql[schema.filter(f => f.attr.toLowerCase() == o.toLowerCase())[0].type]))
 
     const result = await request.query(sqlcode);
-    return !result.recordset ? result.output : result.recordset;
+
+    const { only_one } = options;
+    return !result.recordset ? result.output : only_one ? result.recordset[0] : result.recordset;
 };
+
+module.exports = runSQL;
